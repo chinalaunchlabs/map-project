@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace CloneDo.Mvvm
+namespace Marp
 {
 	public interface IDatabase
 	{

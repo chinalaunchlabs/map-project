@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
-using CloneDo.Mvvm;
-using CloneDo.Mvvm.Droid;
 using Xamarin.Forms;
 using SQLite;
+using Marp;
+using Marp.Droid;
 
 [assembly: Dependency(typeof(Database_Android))]
-namespace CloneDo.Mvvm.Droid
+namespace Marp.Droid
 {
 	public class Database_Android : IDatabase
 	{
@@ -15,7 +15,7 @@ namespace CloneDo.Mvvm.Droid
 		}
 
 		public SQLiteConnection DBConnect () {
-			var filename = "CloneDo.db3";
+			var filename = "Marp.db3";
 			string folder = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
 			var path = Path.Combine (folder, filename);
 			var connection = new SQLiteConnection (path);

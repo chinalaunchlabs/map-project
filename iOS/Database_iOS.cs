@@ -2,18 +2,18 @@
 using SQLite;
 using System.IO;
 using Xamarin.Forms;
-using CloneDo.Mvvm;
-using CloneDo.Mvvm.iOS;
+using Marp;
+using Marp.iOS;
 
 [assembly: Dependency(typeof(Database_iOS))]
-namespace CloneDo.Mvvm.iOS
+namespace Marp.iOS
 {
 	public class Database_iOS : IDatabase
 	{
 		public Database_iOS() { }
 		public SQLiteConnection DBConnect()
 		{
-			var filename = "CloneDo.db3";
+			var filename = "Marp.db3";
 			string folder = 
 				Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 			string libraryFolder = Path.Combine (folder, "..", "Library"); 
