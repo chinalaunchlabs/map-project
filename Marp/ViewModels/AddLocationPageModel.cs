@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Marp.Geocoder;
+using Marp.Models;
 
 namespace Marp
 {
@@ -13,8 +14,7 @@ namespace Marp
 	public class AddLocationPageModel: FreshBasePageModel
 	{
 		public AddLocationPageModel() {
-			MessagingCenter.Subscribe<LocationCellViewModel, Result> (this, "CellTapped", async (sender, result) => {
-//				await CoreMethods.PushPageModel<MapPageModel>(result);
+			MessagingCenter.Subscribe<LocationCellViewModel, MyLocation> (this, "CellTapped", async (sender, result) => {
 				MapPage page = (MapPage) FreshPageModelResolver.ResolvePageModel<MapPageModel>();
 				page.result = result;
 				await CurrentPage.Navigation.PushAsync(page);
@@ -40,7 +40,7 @@ namespace Marp
 		public ICommand SearchCommand {
 			get {
 				return new Command (async (sdf) => {
-					var results = await App.GeocoderClient.FetchLocations(SearchAddress);
+					List<MyLocation> results = await App.GeocoderClient.FetchLocations(SearchAddress);
 					SearchResults = new List<LocationCellViewModel>();
 					foreach (var result in results) {
 						SearchResults.Add(new LocationCellViewModel(result));

@@ -3,8 +3,15 @@
 	<ContentPage.Content>
 
 	<StackLayout>
-		<Label Text="View Location: " />
-		<ListView ItemsSource="{Binding SavedLocations}" />
+		<Label Text="View Location" HorizontalOptions="CenterAndExpand" />
+		<Button Text="Clear Locations" Command="{Binding ClearLocationsCommand}" />			
+		<ListView ItemsSource="{Binding SavedLocations}">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<TextCell Text="{Binding Address}" Command="{Binding EraseGoToLocCommand}" />
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
 	</StackLayout>
 
 	</ContentPage.Content>

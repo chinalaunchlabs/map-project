@@ -2,31 +2,36 @@
 using Marp.Geocoder;
 using FreshMvvm;
 using Xamarin.Forms.Maps;
+using Marp.Models;
 
 namespace Marp
 {
 	// TODO: Clean up this really ugly piece of code.
 	public class MapPageModel: FreshBasePageModel
 	{
-		private Result _result;
+		private MyLocation _location;
 		private MapPage _mapPage;
 
 		protected override void ViewIsAppearing(object sender, System.EventArgs e) {
 
 			_mapPage = (MapPage)CurrentPage;
-			_result = _mapPage.result;
+			_location = _mapPage.result;
 
-			var locations = App.LocationsInSession;
-			Position p = new Position (_result.geometry.location.lat, _result.geometry.location.lng);
-			System.Diagnostics.Debug.WriteLine (p.ToString());
+			if (_location != null) {
+				var locations = App.LocationsInSession;
+				Position p = _location.Position;
 
-			_mapPage.map.MoveToRegion (new MapSpan (p, 0.5, 0.5));
-			foreach (var location in locations) {
-				p = new Position (location.geometry.location.lat, location.geometry.location.lng);
-				_mapPage.map.Pins.Add (new Pin () {
-					Label = location.formatted_address,
-					Position = p
+				_mapPage.map.MoveToRegion (new MapSpan (p, 0.5, 0.5));
+				_mapPage.map.Pins.Add (new Pin() {
+					Label = _location.Address,
+					Position = _location.Position
 				});
+				foreach (var location in locations) {
+					_mapPage.map.Pins.Add (new Pin () {
+						Label = location.Address,
+						Position = location.Position
+					});
+				}
 			}
 
 			base.ViewIsAppearing (sender, e);

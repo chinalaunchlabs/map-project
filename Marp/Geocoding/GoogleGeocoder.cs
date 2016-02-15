@@ -3,6 +3,7 @@ using System.Net;
 using China.RestClient;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Marp.Models;
 
 namespace Marp.Geocoder
 {
@@ -24,10 +25,14 @@ namespace Marp.Geocoder
 			_client = new RestService ();
 		}
 
-		public async Task<List<Result>> FetchLocations(string address) {
+		public async Task<List<MyLocation>> FetchLocations(string address) {
 			var uri = string.Format ("{0}json?address={1}&key={2}", API_BASE, WebUtility.UrlEncode(address), API_KEY);
 			var response = await _client.Get<GoogleGeocoderResponse>(uri);
-			return response.Results;
+			List<MyLocation> locations = new List<MyLocation> ();
+			foreach (var result in response.Results) {
+				locations.Add (new MyLocation (result));
+			}
+			return locations;
 		}
 	}
 }
