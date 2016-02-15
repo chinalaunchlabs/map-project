@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Xamarin.Forms;
+using FreshMvvm;
 
 namespace Marp
 {
@@ -9,23 +10,17 @@ namespace Marp
 		public App ()
 		{
 			// The root page of your application
-			MainPage = new MapView();
+//			var page = FreshPageModelResolver.ResolvePageModel<AddLocationPageModel>();
+//			var basicNavContainer = new FreshNavigationContainer (page);
+//			MainPage = basicNavContainer;
+
+			var masterDetailNav = new FreshMasterDetailNavigationContainer ();
+			masterDetailNav.Init ("Menu");
+			masterDetailNav.AddPage<AddLocationPageModel> ("Add Location");
+			masterDetailNav.AddPage<ViewLocationPageModel> ("View Location");
+			MainPage = masterDetailNav;
 		}
 
-		protected override void OnStart ()
-		{
-			// Handle when your app starts
-		}
-
-		protected override void OnSleep ()
-		{
-			// Handle when your app sleeps
-		}
-
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
-		}
 	}
 }
 
