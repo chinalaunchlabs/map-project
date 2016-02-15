@@ -2,13 +2,10 @@
 using FreshMvvm;
 using PropertyChanged;
 using Xamarin.Forms;
-using Xamarin.Forms.Maps;
-using System.Linq;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Net.Http;
-using System.Net;
+using Marp.Geocoder;
 
 namespace Marp
 {
@@ -16,7 +13,12 @@ namespace Marp
 	public class AddLocationPageModel: FreshBasePageModel
 	{
 		public AddLocationPageModel() {
-	
+			MessagingCenter.Subscribe<LocationCellViewModel, Result> (this, "CellTapped", async (sender, result) => {
+//				await CoreMethods.PushPageModel<MapPageModel>(result);
+				MapPage page = (MapPage) FreshPageModelResolver.ResolvePageModel<MapPageModel>();
+				page.result = result;
+				await CurrentPage.Navigation.PushAsync(page);
+			});
 		}
 
 		private string _searchAddress;
@@ -27,8 +29,8 @@ namespace Marp
 			}
 		}
 
-		private List<string> _searchResults;
-		public List<string> SearchResults {
+		private List<LocationCellViewModel> _searchResults;
+		public List<LocationCellViewModel> SearchResults {
 			get { return _searchResults; }
 			set {
 				_searchResults = value;
@@ -39,9 +41,9 @@ namespace Marp
 			get {
 				return new Command (async (sdf) => {
 					var results = await App.GeocoderClient.FetchLocations(SearchAddress);
-					SearchResults = new List<string>();
+					SearchResults = new List<LocationCellViewModel>();
 					foreach (var result in results) {
-						SearchResults.Add(result.formatted_address);
+						SearchResults.Add(new LocationCellViewModel(result));
 					}
 				});
 			}

@@ -8,9 +8,13 @@
 
 			<SearchBar Text="{Binding SearchAddress}" SearchCommand="{Binding SearchCommand}" />
 
-			<Label Text="Results:" HorizontalOptions="CenterAndExpand" />
-
-			<ListView ItemsSource="{Binding SearchResults}" />
+			<ListView ItemsSource="{Binding SearchResults}">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<TextCell Text="{Binding Address}" Command="{Binding GoToLocCommand}" />
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
 
 		</StackLayout>
 

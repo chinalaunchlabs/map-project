@@ -1,5 +1,6 @@
 ﻿using System;
 using SQLite;
+using Xamarin.Forms.Maps;
 
 namespace Marp.Models
 {
@@ -8,7 +9,7 @@ namespace Marp.Models
 		[PrimaryKey, AutoIncrement]
 		public int ID { get; set; }
 		public string Address { get; set; }
-		public Coordinate Coord { get; set; }
+		public Position Position { get; set; }
 	}
 }
 

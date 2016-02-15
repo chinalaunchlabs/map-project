@@ -69,7 +69,6 @@ namespace China.RestClient
 		/// <param name="parameters">Fetch URI.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public async Task<T> Get<T>(string parameters) where T: IResponseObject {
-			System.Diagnostics.Debug.WriteLine ("RestService::GET " + string.Format("{0}{1}", _client.BaseAddress, parameters));
 			IResponseObject instance = ((IResponseObject)Activator.CreateInstance<T>());
 			CancellationTokenSource source = new CancellationTokenSource ();
 			CancellationToken token = source.Token;
