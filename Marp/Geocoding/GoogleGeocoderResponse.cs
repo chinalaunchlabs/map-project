@@ -31,8 +31,8 @@ namespace Marp.Geocoder
 			response.results = null;
 		}
 
-		public string Results {
-			get { return response.results.ToString(); }
+		public List<Result> Results {
+			get { return response.results; }
 		}
 	}
 

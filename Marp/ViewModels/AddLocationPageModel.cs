@@ -32,21 +32,17 @@ namespace Marp
 			get { return _searchResults; }
 			set {
 				_searchResults = value;
-				if (value != null) {
-
-				}
 			}
 		}
 
 		public ICommand SearchCommand {
 			get {
 				return new Command (async (sdf) => {
-					App.GeocoderClient.FetchLocations(SearchAddress);
-//					var client = new HttpClient();
-//					client.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/geocode/");
-//					var response = await client.GetAsync(string.Format ("json?address={0}&key={1}", WebUtility.UrlEncode(SearchAddress), "AIzaSyBED447FFVqdLwJizxQpUAqcvDj4brgx1c"));
-//					var json = await response.Content.ReadAsStringAsync();
-//					System.Diagnostics.Debug.WriteLine(json);
+					var results = await App.GeocoderClient.FetchLocations(SearchAddress);
+					SearchResults = new List<string>();
+					foreach (var result in results) {
+						SearchResults.Add(result.formatted_address);
+					}
 				});
 			}
 		}
