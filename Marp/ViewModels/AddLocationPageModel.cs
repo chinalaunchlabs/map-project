@@ -7,15 +7,16 @@ using System.Linq;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net;
 
 namespace Marp
 {
 	[ImplementPropertyChanged]
 	public class AddLocationPageModel: FreshBasePageModel
 	{
-		private Geocoder _geocoder;
 		public AddLocationPageModel() {
-			_geocoder = new Geocoder ();
+	
 		}
 
 		private string _searchAddress;
@@ -31,15 +32,21 @@ namespace Marp
 			get { return _searchResults; }
 			set {
 				_searchResults = value;
+				if (value != null) {
+
+				}
 			}
 		}
 
 		public ICommand SearchCommand {
 			get {
-				return new Command ((sdf) => {
-					var results = _geocoder.GetPositionsForAddressAsync(SearchAddress);
-//					foreach (Position result in results)
-						System.Diagnostics.Debug.WriteLine(results);
+				return new Command (async (sdf) => {
+					App.GeocoderClient.FetchLocations(SearchAddress);
+//					var client = new HttpClient();
+//					client.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/geocode/");
+//					var response = await client.GetAsync(string.Format ("json?address={0}&key={1}", WebUtility.UrlEncode(SearchAddress), "AIzaSyBED447FFVqdLwJizxQpUAqcvDj4brgx1c"));
+//					var json = await response.Content.ReadAsStringAsync();
+//					System.Diagnostics.Debug.WriteLine(json);
 				});
 			}
 		}

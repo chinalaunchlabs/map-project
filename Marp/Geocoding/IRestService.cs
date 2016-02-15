@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace RestService
+namespace China.RestClient
 {
 	public interface IRestService
 	{

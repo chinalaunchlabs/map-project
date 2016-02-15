@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace RestService
+namespace China.RestClient
 {
 	public interface IResponseObject
 	{

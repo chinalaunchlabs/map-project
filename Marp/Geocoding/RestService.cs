@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Text;
 
-namespace RestService
+namespace China.RestClient
 {
 	/// <summary>
 	/// Wrapper for the Microsoft.HttpClient library.
@@ -39,7 +39,6 @@ namespace RestService
 		private void InitializeClient() {
 			_client.DefaultRequestHeaders.Accept.Clear ();
 			_client.DefaultRequestHeaders.Accept.Add (new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue ("application/json"));
-			_client.Timeout = TimeSpan.FromMilliseconds (1000);	// TODO: Edit artificial timeout later.
 		}
 
 		/// <summary>
@@ -70,6 +69,7 @@ namespace RestService
 		/// <param name="parameters">Fetch URI.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public async Task<T> Get<T>(string parameters) where T: IResponseObject {
+			System.Diagnostics.Debug.WriteLine ("RestService::GET " + string.Format("{0}{1}", _client.BaseAddress, parameters));
 			IResponseObject instance = ((IResponseObject)Activator.CreateInstance<T>());
 			CancellationTokenSource source = new CancellationTokenSource ();
 			CancellationToken token = source.Token;
@@ -79,6 +79,7 @@ namespace RestService
 			}
 			catch (Exception e) {
 				instance.HandleException(e, source);
+				throw e;
 			}
 
 			return (T)instance;
