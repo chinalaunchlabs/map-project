@@ -42,6 +42,7 @@ namespace Marp
 			masterDetailNav.AddPage<MapPageModel> ("Home");
 			masterDetailNav.AddPage<AddLocationPageModel> ("Add Location");
 			masterDetailNav.AddPage<ViewLocationPageModel> ("View Location");
+
 			MainPage = masterDetailNav;
 		}
 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Marp.Geocoder;
 using Marp.Models;
+using System.Collections.ObjectModel;
 
 namespace Marp
 {
@@ -28,9 +29,9 @@ namespace Marp
 				_searchAddress = value;
 			}
 		}
-
-		private List<LocationCellViewModel> _searchResults;
-		public List<LocationCellViewModel> SearchResults {
+			
+		private ObservableCollection<LocationCellViewModel> _searchResults;
+		public ObservableCollection<LocationCellViewModel> SearchResults {
 			get { return _searchResults; }
 			set {
 				_searchResults = value;
@@ -41,12 +42,21 @@ namespace Marp
 			get {
 				return new Command (async (sdf) => {
 					List<MyLocation> results = await App.GeocoderClient.FetchLocations(SearchAddress);
-					SearchResults = new List<LocationCellViewModel>();
+					SearchResults = new ObservableCollection<LocationCellViewModel>();
 					foreach (var result in results) {
 						SearchResults.Add(new LocationCellViewModel(result));
 					}
 				});
 			}
+		}
+
+		protected override void ViewIsDisappearing (object sender, EventArgs e)
+		{
+			// clear search
+			SearchAddress = "";
+			SearchResults.Clear ();
+
+			base.ViewIsDisappearing (sender, e);
 		}
 	}
 }
