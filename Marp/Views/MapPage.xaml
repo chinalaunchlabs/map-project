@@ -3,7 +3,12 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 	xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
 	xmlns:local="clr-namespace:Marp;assembly=Marp"
+	xmlns:b="clr-namespace:Xamarin.Forms.Behaviors;assembly=Xamarin.Forms.Behaviors"
 	x:Class="Marp.MapPage">
+	<ContentPage.Title>
+		Map Project
+	</ContentPage.Title>
+
 	<ContentPage.Content>
 
 		<StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Spacing="0">
@@ -15,6 +20,9 @@
 					<local:ExtendedMapBehavior ItemsSource="{Binding Pins}" />
 				</maps:Map.Behaviors>
 			</maps:Map>
+
+			<SearchBar Text="{Binding SearchAddress}" SearchCommand="{Binding SearchCommand}">
+			</SearchBar>
 		</StackLayout>
 
 	</ContentPage.Content>

@@ -15,6 +15,7 @@ namespace Marp
 	public class AddLocationPageModel: FreshBasePageModel
 	{
 		public AddLocationPageModel() {
+			System.Diagnostics.Debug.WriteLine ("AddLocationPageModel::Initialization");
 			MessagingCenter.Subscribe<LocationCellViewModel, MyLocation> (this, "CellTapped", async (sender, result) => {
 				MapPage page = (MapPage) FreshPageModelResolver.ResolvePageModel<MapPageModel>();
 				page.result = result;
@@ -54,7 +55,8 @@ namespace Marp
 		{
 			// clear search
 			SearchAddress = "";
-			SearchResults.Clear ();
+			if (SearchResults != null && SearchResults.Count > 0)
+				SearchResults.Clear ();
 
 			base.ViewIsDisappearing (sender, e);
 		}

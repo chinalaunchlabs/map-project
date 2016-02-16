@@ -13,6 +13,8 @@ namespace Marp
 	{
 
 		public ViewLocationPageModel() {
+			System.Diagnostics.Debug.WriteLine ("ViewLocationPageModel::Initialization");
+
 			LoadLocations ();
 
 			MessagingCenter.Subscribe <LocationCellViewModel, MyLocation> (this, "CellTapped2", async (sender, location) => {
