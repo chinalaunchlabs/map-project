@@ -54,7 +54,7 @@ namespace Marp
 			get { return _listRowHeight; }
 		}
 
-		private int _listHeight;
+		private int _listHeight = 0;
 		public int ListHeight {
 			get { 
 				return _listHeight;
@@ -86,6 +86,7 @@ namespace Marp
 							LocationSuggestions.Add (new LocationCellViewModel (location));
 						}
 						ListHeight = Math.Min(LocationSuggestions.Count, _maxListItems) * _listRowHeight;
+						System.Diagnostics.Debug.WriteLine(ListHeight);
 						IsListVisible = true;
 					} 
 				});

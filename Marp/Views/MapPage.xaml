@@ -19,18 +19,17 @@
 	<ContentPage.Content>
 
 		<StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Spacing="0">
-			<maps:Map MapType="Street" 
-					  HorizontalOptions="FillAndExpand"
-					  VerticalOptions="FillAndExpand" 
-					  IsShowingUser="true" IsVisible="true" x:Name="_map">
-				<maps:Map.Behaviors>
-					<b:ExtendedMapBehavior ItemsSource="{Binding Pins}" />
-				</maps:Map.Behaviors>
-			</maps:Map>
+			<SearchBar Text="{Binding SearchAddress}" SearchCommand="{Binding SearchCommand}" VerticalOptions="Fill">
+				<SearchBar.Behaviors>
+					<b:EventToCommandBehavior EventName="TextChanged" Command="{Binding TextChangedEvent}" EventArgsConverter="{StaticResource TextChangedConverter}" />
+					<b:EventToCommandBehavior EventName="Focused" Command="{Binding SearchBarFocused}" EventArgsConverter="{StaticResource FocusConverter}" />
+					<b:EventToCommandBehavior EventName="Unfocused" Command="{Binding SearchBarUnfocused}" EventArgsConverter="{StaticResource FocusConverter}" />
+				</SearchBar.Behaviors>
+			</SearchBar>
 
-			<StackLayout Spacing="0" VerticalOptions="Fill">
-				<ListView ItemsSource="{Binding LocationSuggestions}" IsVisible="{Binding IsListVisible}" 
-					HasUnevenRows="false" RowHeight="{Binding ListRowHeight, Mode=OneWay}" 
+			<StackLayout Spacing="0" IsVisible="{Binding IsListVisible}">
+				<ListView ItemsSource="{Binding LocationSuggestions}"
+					HasUnevenRows="true" RowHeight="{Binding ListRowHeight, Mode=OneWay}" 
 					HeightRequest="{Binding ListHeight, Mode=OneWay}">
 					<ListView.ItemTemplate>
 						<DataTemplate>
@@ -40,13 +39,16 @@
 				</ListView>
 			</StackLayout>
 
-			<SearchBar Text="{Binding SearchAddress}" SearchCommand="{Binding SearchCommand}" VerticalOptions="Fill">
-				<SearchBar.Behaviors>
-					<b:EventToCommandBehavior EventName="TextChanged" Command="{Binding TextChangedEvent}" EventArgsConverter="{StaticResource TextChangedConverter}" />
-					<b:EventToCommandBehavior EventName="Focused" Command="{Binding SearchBarFocused}" EventArgsConverter="{StaticResource FocusConverter}" />
-					<b:EventToCommandBehavior EventName="Unfocused" Command="{Binding SearchBarUnfocused}" EventArgsConverter="{StaticResource FocusConverter}" />
-				</SearchBar.Behaviors>
-			</SearchBar>
+			<maps:Map MapType="Street" 
+					  HorizontalOptions="FillAndExpand"
+					  VerticalOptions="FillAndExpand" 
+					  IsShowingUser="true" IsVisible="true" x:Name="_map">
+				<maps:Map.Behaviors>
+					<b:ExtendedMapBehavior ItemsSource="{Binding Pins}" />
+				</maps:Map.Behaviors>
+			</maps:Map>
+
+
 		</StackLayout>
 
 	</ContentPage.Content>
