@@ -27,6 +27,35 @@ namespace Marp.Behaviors
 			behavior.AddPins ();
 		}
 
+		public static readonly BindableProperty FocusOnProperty =
+			BindableProperty.Create<ExtendedMapBehavior, MyLocation> (
+				p => p.FocusOn, null, BindingMode.TwoWay, null, FocusOnSourceChanged
+			);
+
+		public MyLocation FocusOn {
+			get { return (MyLocation)GetValue (FocusOnProperty); }
+			set { SetValue (FocusOnProperty, value); }
+		}
+
+		private static void FocusOnSourceChanged(BindableObject bindable, MyLocation oldVal, MyLocation newVal) {
+			var behavior = bindable as ExtendedMapBehavior;
+			if (behavior == null)
+				return;
+			behavior.MoveToRegion ();
+		}
+
+		private void MoveToRegion() {
+			System.Diagnostics.Debug.WriteLine ("ExtendedMapBehavior::MoveToRegion()");
+			if (FocusOn == null)
+				return;
+
+			MyLocation location = FocusOn;
+
+			System.Diagnostics.Debug.WriteLine ("ExtendedMapBehavior::Focusing on {0}, {1}", location.Latitude, location.Longitude );
+
+			_map.MoveToRegion (new MapSpan (location.Position, 0.01, 0.01));
+		}
+
 		private void AddPins() {
 			System.Diagnostics.Debug.WriteLine ("ExtendedMapBehavior::AddPins()");
 			if (ItemsSource == null)

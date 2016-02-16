@@ -24,6 +24,7 @@ namespace Marp
 					tmp.Add(loc);
 				}
 				Pins = tmp;
+				LocationFocus = result;
 			});
 		}
 
@@ -75,6 +76,12 @@ namespace Marp
 		public bool LoadingResults {
 			get { return _loadingResults; }
 			set { _loadingResults = value; }
+		}
+
+		private MyLocation _locationFocus;
+		public MyLocation LocationFocus {
+			get { return _locationFocus; }
+			set { _locationFocus = value; }
 		}
 
 		/* Commands */

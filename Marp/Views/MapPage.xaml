@@ -46,7 +46,7 @@
 					  VerticalOptions="FillAndExpand" 
 					  IsShowingUser="true" IsVisible="true" x:Name="_map">
 				<maps:Map.Behaviors>
-					<b:ExtendedMapBehavior ItemsSource="{Binding Pins}" />
+					<b:ExtendedMapBehavior ItemsSource="{Binding Pins}" FocusOn="{Binding LocationFocus}" />
 				</maps:Map.Behaviors>
 			</maps:Map>
 
