@@ -2,9 +2,16 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 	xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
-	xmlns:local="clr-namespace:Marp;assembly=Marp"
-	xmlns:b="clr-namespace:Xamarin.Forms.Behaviors;assembly=Xamarin.Forms.Behaviors"
+	xmlns:b="clr-namespace:Marp.Behaviors;assembly=Marp"
 	x:Class="Marp.MapPage">
+
+	<ContentPage.Resources>
+		<ResourceDictionary>
+			<b:TextChangedEventArgsConverter x:Key="TextChangedConverter" />
+			<b:FocusEventArgsConverter x:Key="FocusConverter" />
+		</ResourceDictionary>
+	</ContentPage.Resources>
+
 	<ContentPage.Title>
 		Map Project
 	</ContentPage.Title>
@@ -17,11 +24,28 @@
 					  VerticalOptions="FillAndExpand" 
 					  IsShowingUser="true" IsVisible="true" x:Name="_map">
 				<maps:Map.Behaviors>
-					<local:ExtendedMapBehavior ItemsSource="{Binding Pins}" />
+					<b:ExtendedMapBehavior ItemsSource="{Binding Pins}" />
 				</maps:Map.Behaviors>
 			</maps:Map>
 
-			<SearchBar Text="{Binding SearchAddress}" SearchCommand="{Binding SearchCommand}">
+			<StackLayout Spacing="0" VerticalOptions="Fill">
+				<ListView ItemsSource="{Binding LocationSuggestions}" IsVisible="{Binding IsListVisible}" 
+					HasUnevenRows="false" RowHeight="{Binding ListRowHeight, Mode=OneWay}" 
+					HeightRequest="{Binding ListHeight, Mode=OneWay}">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<TextCell Text="{Binding Address}" Command="{Binding GoToLocCommand}" />
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+			</StackLayout>
+
+			<SearchBar Text="{Binding SearchAddress}" SearchCommand="{Binding SearchCommand}" VerticalOptions="Fill">
+				<SearchBar.Behaviors>
+					<b:EventToCommandBehavior EventName="TextChanged" Command="{Binding TextChangedEvent}" EventArgsConverter="{StaticResource TextChangedConverter}" />
+					<b:EventToCommandBehavior EventName="Focused" Command="{Binding SearchBarFocused}" EventArgsConverter="{StaticResource FocusConverter}" />
+					<b:EventToCommandBehavior EventName="Unfocused" Command="{Binding SearchBarUnfocused}" EventArgsConverter="{StaticResource FocusConverter}" />
+				</SearchBar.Behaviors>
 			</SearchBar>
 		</StackLayout>
 
