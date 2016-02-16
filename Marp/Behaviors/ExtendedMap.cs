@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Xamarin.Forms;
 using Marp.Models;
 
-namespace Marp
+namespace Marp.Behaviors
 {
 	public class ExtendedMapBehavior: Behavior<Map>
 	{
