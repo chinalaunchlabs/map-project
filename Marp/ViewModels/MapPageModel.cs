@@ -7,6 +7,7 @@ using Marp.Geocoder;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using PropertyChanged;
+using System.Collections.Generic;
 
 namespace Marp
 {
@@ -17,7 +18,13 @@ namespace Marp
 		private const int _maxListItems = 3;
 		private const int _listRowHeight = 50;
 		public MapPageModel() {
-
+			MessagingCenter.Subscribe<LocationCellViewModel, MyLocation> (this, "CellTapped", async (sender, result) => {
+				ObservableCollection<MyLocation> tmp = new ObservableCollection<MyLocation>();
+				foreach (var loc in App.LocationsInSession) {
+					tmp.Add(loc);
+				}
+				Pins = tmp;
+			});
 		}
 
 		/* Exposed Properties */
@@ -64,6 +71,11 @@ namespace Marp
 			}
 		}
 
+		private bool _loadingResults;
+		public bool LoadingResults {
+			get { return _loadingResults; }
+			set { _loadingResults = value; }
+		}
 
 		/* Commands */
 		public ICommand TextChangedEvent {
@@ -86,7 +98,6 @@ namespace Marp
 							LocationSuggestions.Add (new LocationCellViewModel (location));
 						}
 						ListHeight = Math.Min(LocationSuggestions.Count, _maxListItems) * _listRowHeight;
-						System.Diagnostics.Debug.WriteLine(ListHeight);
 						IsListVisible = true;
 					} 
 				});
@@ -109,7 +120,26 @@ namespace Marp
 				});
 			}
 		}
-		
+
+		public ICommand SearchCommand {
+			get {
+				return new Command (async() => {
+					System.Diagnostics.Debug.WriteLine("Fetching results...");
+					LoadingResults = true;
+					List<MyLocation> results = await App.GeocoderClient.FetchLocations(SearchAddress);
+					System.Diagnostics.Debug.WriteLine("Got results...");
+					LocationSuggestions = new ObservableCollection<LocationCellViewModel>();
+					foreach (var result in results) {
+						System.Diagnostics.Debug.WriteLine("loc: {0}", result.Address);
+						LocationSuggestions.Add(new LocationCellViewModel(result));
+					}
+					ListHeight = Math.Min(LocationSuggestions.Count, _maxListItems) * _listRowHeight;
+					LoadingResults = false;
+					IsListVisible = true;
+				});
+			}
+		}
+
 //		private object _textChangedEv = null;
 //		public object TextChangedEvent {
 //			get { return _textChangedEv; }

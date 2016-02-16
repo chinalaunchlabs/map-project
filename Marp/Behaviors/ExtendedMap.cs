@@ -29,10 +29,13 @@ namespace Marp.Behaviors
 
 		private void AddPins() {
 			System.Diagnostics.Debug.WriteLine ("ExtendedMapBehavior::AddPins()");
-			_map.Pins.Clear ();
 			if (ItemsSource == null)
 				return;
+
+			_map.Pins.Clear ();
+
 			foreach (var item in ItemsSource) {
+				System.Diagnostics.Debug.WriteLine ("ExtendedMapBehavior::Adding {0}", item.Address);
 				_map.Pins.Add (new Pin() {
 					Label = item.Address,
 					Position = item.Position

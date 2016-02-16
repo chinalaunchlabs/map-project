@@ -34,9 +34,9 @@ namespace Marp.Models
 			lock (locker) {
 				var tmp = database.Table<MyLocation>().ToList ();
 				bool flag = false;
-				System.Diagnostics.Debug.WriteLine ("loc.Address: {0}", loc.Address);
+//				System.Diagnostics.Debug.WriteLine ("loc.Address: {0}", loc.Address);
 				foreach (MyLocation t in tmp) {
-					System.Diagnostics.Debug.WriteLine ("t.Address: {0}", t.Address);
+//					System.Diagnostics.Debug.WriteLine ("t.Address: {0}", t.Address);
 					if (t.Address == loc.Address)
 						flag = true;
 				}

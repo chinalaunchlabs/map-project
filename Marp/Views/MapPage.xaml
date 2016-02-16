@@ -39,6 +39,8 @@
 				</ListView>
 			</StackLayout>
 
+			<ActivityIndicator Color="Gray" IsRunning="{Binding LoadingResults}" IsVisible="{Binding LoadingResults}" />
+
 			<maps:Map MapType="Street" 
 					  HorizontalOptions="FillAndExpand"
 					  VerticalOptions="FillAndExpand" 
