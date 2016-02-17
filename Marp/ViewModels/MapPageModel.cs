@@ -99,7 +99,7 @@ namespace Marp
 		public ICommand TextChangedEvent {
 			get {
 				return new Command (() => {
-					System.Diagnostics.Debug.WriteLine("MapPageModel::Text changed event fired.");
+//					System.Diagnostics.Debug.WriteLine("MapPageModel::Text changed event fired.");
 				});
 			}
 		}

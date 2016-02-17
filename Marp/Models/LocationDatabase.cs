@@ -20,7 +20,7 @@ namespace Marp.Models
 
 		public List<MyLocation> GetLocations() {
 			lock (locker) {
-				return database.Table<MyLocation> ().ToList();
+				return database.Table<MyLocation> ().OrderBy( l => l.Address ).ToList();
 			}
 		}
 
@@ -30,24 +30,31 @@ namespace Marp.Models
 			}
 		}
 
-		public int SaveLocation(MyLocation loc) {
+		public bool InDatabase(string addr) {
 			lock (locker) {
-				var tmp = database.Table<MyLocation>().ToList ();
-				bool flag = false;
-//				System.Diagnostics.Debug.WriteLine ("loc.Address: {0}", loc.Address);
-				foreach (MyLocation t in tmp) {
-//					System.Diagnostics.Debug.WriteLine ("t.Address: {0}", t.Address);
-					if (t.Address == loc.Address)
-						flag = true;
-				}
-				
-				if (flag) {
+				var tmp = database.Query<MyLocation> ("SELECT * FROM MyLocation WHERE Address = ?", addr);
+				if (tmp.Any ())
+					return true;
+				else
+					return false;
+			}
+		}
+
+		public int SaveLocation(MyLocation loc) {
+			lock (locker) {				
+				if (InDatabase(loc.Address)) {
 					System.Diagnostics.Debug.WriteLine ("LocationDatabase::Place already in db, not saving.");
-//					database.Update (loc);
 					return loc.ID;
 				} else {
+					System.Diagnostics.Debug.WriteLine ("LocationDatabase::Saved to db.");
 					return database.Insert (loc);
 				}
+			}
+		}
+
+		public int DeleteLocation(int id) {
+			lock (locker) {
+				return database.Delete<MyLocation> (id);
 			}
 		}
 

@@ -13,16 +13,33 @@ namespace Marp
 		public LocationCellViewModel (MyLocation loc)
 		{
 			_location = loc;
+			_inDatabase = App.Database.InDatabase (_location.Address);
 		}
 
 		public string Address {
 			get { return _location.Address.Truncate(40); }
 		}
 
+		private bool _inDatabase;
+		public bool InDatabase {
+			get {
+				return _inDatabase;
+			}
+			set {
+				if (value)
+					App.Database.SaveLocation (_location);
+				else
+					App.Database.DeleteLocation (_location.ID);
+				_inDatabase = value;
+			}
+		}
 
 		public float FaveOpacity {
 			get {
-				return 1;
+				if (InDatabase)
+					return 1;
+				else
+					return 0.1f;
 			}
 		}
 
@@ -37,7 +54,8 @@ namespace Marp
 		public ICommand SaveLocationCommand {
 			get { 
 				return new Command (() => {
-					App.Database.SaveLocation(_location);
+					InDatabase = !InDatabase;	
+					RaisePropertyChanged("FaveOpacity");
 				});
 			}
 		}

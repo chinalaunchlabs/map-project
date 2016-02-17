@@ -27,6 +27,7 @@ namespace Marp.Models
 
 		[PrimaryKey, AutoIncrement]
 		public int ID { get; set; }
+		[Unique]
 		public string Address { get; set; }
 		public double Latitude { get; set; }
 		public double Longitude { get; set; }
