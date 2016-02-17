@@ -40,9 +40,6 @@ namespace Marp
 				vm.CurrentPage = page;
 
 				await CurrentPage.Navigation.PushModalAsync(page);
-
-//				var page = FreshPageModelResolver.ResolvePageModel<ViewSinglePageModel>(result);
-//				await CurrentPage.Navigation.PushModalAsync(page);
 			});
 
 			base.ViewIsAppearing (sender, e);

@@ -16,6 +16,7 @@
 				</maps:Map.Behaviors>
 			</maps:Map>
 
+			<Button Text="Close this View" Command="{Binding PopPageCommand}" HorizontalOptions="Fill" />
 		</StackLayout>
 
 	</ContentPage.Content>

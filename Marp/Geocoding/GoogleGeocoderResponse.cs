@@ -25,6 +25,8 @@ namespace Marp.Geocoder
 				} else {
 					System.Diagnostics.Debug.WriteLine ("GoogleGeocoderResponse::This is a web request time out.");
 				}
+			} else {
+				throw e;
 			}
 			response = new GoogleGeocoderResponseObj ();
 			response.status = "error";

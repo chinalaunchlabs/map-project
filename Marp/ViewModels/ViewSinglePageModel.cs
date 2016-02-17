@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 using FreshMvvm;
 using PropertyChanged;
-using System.Collections.Generic;
+using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Marp.Models;
-using System.Collections.ObjectModel;
 
 namespace Marp
 {
@@ -32,6 +33,14 @@ namespace Marp
 			set { _location = value; }
 		}
 
+		public ICommand PopPageCommand {
+			get {
+				return new Command(() => {
+					// TODO: Reimplement in FreshMvvm framework when I know how to.
+					CurrentPage.Navigation.PopModalAsync();
+				});
+			}
+		}
 	}
 }
 
