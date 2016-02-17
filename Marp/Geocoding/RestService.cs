@@ -78,7 +78,7 @@ namespace China.RestClient
 			}
 			catch (Exception e) {
 				instance.HandleException(e, source);
-				throw e;
+//				throw e;
 			}
 
 			return (T)instance;

@@ -30,8 +30,19 @@ namespace Marp
 
 		protected override void ViewIsAppearing (object sender, EventArgs e)
 		{
-			MessagingCenter.Subscribe<LocationCellViewModel, MyLocation> (this, "LocationTapped", (sndr, result) => {
+			LoadLocations ();
+			MessagingCenter.Subscribe<LocationCellViewModel, MyLocation> (this, "LocationTapped", async (sndr, result) => {
 				LocationFocus = result;
+				// TODO: Maybe get this working within the FreshMvvm framework?
+				ViewSinglePageModel vm = new ViewSinglePageModel(result);
+				ViewSinglePage page = new ViewSinglePage();
+				page.BindingContext = vm;
+				vm.CurrentPage = page;
+
+				await CurrentPage.Navigation.PushModalAsync(page);
+
+//				var page = FreshPageModelResolver.ResolvePageModel<ViewSinglePageModel>(result);
+//				await CurrentPage.Navigation.PushModalAsync(page);
 			});
 
 			base.ViewIsAppearing (sender, e);
