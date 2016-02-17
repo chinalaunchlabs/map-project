@@ -1,12 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Marp.LocationCell">
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	xmlns:b="clr-namespace:Marp.Behaviors;assembly=Marp"
+	xmlns:local="clr-namespace:Marp;assembly=Marp" 
+	x:Class="Marp.LocationCell">
 
 	<StackLayout Orientation="Horizontal">
-		<Image Source="star_16.png" Aspect="AspectFill" VerticalOptions="Center" HorizontalOptions="Start" IsVisible="true" Opacity="{Binding FaveOpacity}">
-			<Image.GestureRecognizers>
+		<ContentView HorizontalOptions="Start" Padding="15">
+			<ContentView.GestureRecognizers>
 				<TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding SaveLocationCommand}" />
-			</Image.GestureRecognizers>
-		</Image>
+			</ContentView.GestureRecognizers>
+			<Image Source="star_16.png" Aspect="AspectFill" VerticalOptions="Center" HorizontalOptions="Start" IsVisible="true" Opacity="{Binding FaveOpacity}">
+
+			</Image>
+		</ContentView>
 		<ContentView HorizontalOptions="FillAndExpand" Padding="15">
 			<ContentView.GestureRecognizers>
 				<TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding GoToLocCommand}" />

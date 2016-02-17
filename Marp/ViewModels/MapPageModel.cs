@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using PropertyChanged;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Marp
 {
@@ -17,17 +18,18 @@ namespace Marp
 	{
 		private const int _maxListItems = 3;
 		private const int _listRowHeight = 50;
+		private bool _starTapped = false;
 		public MapPageModel() {
-			MessagingCenter.Subscribe<LocationCellViewModel, MyLocation> (this, "CellTapped", async (sender, result) => {
+		}
+
+		protected override void ViewIsAppearing (object sender, EventArgs e)
+		{
+			MessagingCenter.Subscribe<LocationCellViewModel, MyLocation> (this, "LocationTapped", (sndr, result) => {
 				// save to session
 				App.LocationsInSession.Add(result);
 
-				// save to database
-//				App.Database.SaveLocation(result);
-
-				// clear search and hide results
+				// hide results
 				IsListVisible = false;
-//				SearchAddress = "";
 
 				// update map
 				ObservableCollection<MyLocation> tmp = new ObservableCollection<MyLocation>();
@@ -36,7 +38,21 @@ namespace Marp
 				}
 				Pins = tmp;
 				LocationFocus = result;
+				_starTapped = false;
 			});
+
+			MessagingCenter.Subscribe<LocationCellViewModel, MyLocation> (this, "StarTapped", (sndr, location) => {
+				System.Diagnostics.Debug.WriteLine("MapPageModel::Star was tapped.");
+				_starTapped = true;
+			});
+			base.ViewIsAppearing (sender, e);
+		}
+
+		protected override void ViewIsDisappearing (object sender, EventArgs e)
+		{
+			System.Diagnostics.Debug.WriteLine ("MapPageModel::View is disappearing");
+			MessagingCenter.Unsubscribe<LocationCellViewModel, MyLocation> (this, "LocationTapped");
+			base.ViewIsDisappearing (sender, e);
 		}
 
 		/* Exposed Properties */
@@ -96,10 +112,26 @@ namespace Marp
 		}
 
 		/* Commands */
+		List<MyLocation> _oldFiltered = new List<MyLocation>();
 		public ICommand TextChangedEvent {
 			get {
-				return new Command (() => {
+				return new Command ((dfsdf) => {
 //					System.Diagnostics.Debug.WriteLine("MapPageModel::Text changed event fired.");
+					var partialQuery = SearchAddress;
+					List<MyLocation> savedLocations = App.Database.GetLocations();
+					List<MyLocation> filteredList = savedLocations.Where(l => l.Address.Contains(partialQuery)).ToList();
+
+					// if filtered locations changed, saka baguhin
+					// otherwise jittery yung pag-refresh ng listview kung di naman talaga nagbabago yung dataset
+					// TODO: Fix this, the condition doesn't work.
+					if (!filteredList.All(_oldFiltered.Contains)) {
+						LocationSuggestions = new ObservableCollection<LocationCellViewModel> ();
+						foreach (var location in filteredList) {
+							LocationSuggestions.Add (new LocationCellViewModel (location));
+						}
+						ListHeight = Math.Min(LocationSuggestions.Count, _maxListItems) * _listRowHeight;
+						_oldFiltered = filteredList;
+					}
 				});
 			}
 		}
@@ -118,6 +150,9 @@ namespace Marp
 						ListHeight = Math.Min(LocationSuggestions.Count, _maxListItems) * _listRowHeight;
 						IsListVisible = true;
 					} 
+					else {
+						IsListVisible = true;
+					}
 				});
 			}
 		}
@@ -125,30 +160,29 @@ namespace Marp
 		public ICommand SearchBarUnfocused {
 			get {
 				return new Command (() => {
-					System.Diagnostics.Debug.WriteLine("MapPageModel::Search bar has been untapped.");
-					IsListVisible = false;
+					System.Diagnostics.Debug.WriteLine("MapPageModel::Search bar has gone out of focus.");
+					System.Diagnostics.Debug.WriteLine("MapPageModel::_starTapped = {0}", _starTapped);
+
+					if (_starTapped) {
+						System.Diagnostics.Debug.WriteLine("MapPageModel::But a star was tapped so not hiding list.");
+						_starTapped = false;
+					}
+					else {
+						System.Diagnostics.Debug.WriteLine("MapPageModel::Hiding list.");
+						IsListVisible = false;
+					}
 				});
 			}
 		}
-
-		public ICommand GoToLocCommand {
-			get {
-				return new Command (() => {
-					System.Diagnostics.Debug.WriteLine("MapPageModel::GoToLocCommand placeholder.");
-				});
-			}
-		}
-
+			
 		public ICommand SearchCommand {
 			get {
 				return new Command (async() => {
-					System.Diagnostics.Debug.WriteLine("Fetching results...");
+					IsListVisible = false;
 					LoadingResults = true;
 					List<MyLocation> results = await App.GeocoderClient.FetchLocations(SearchAddress);
-					System.Diagnostics.Debug.WriteLine("Got results...");
 					LocationSuggestions = new ObservableCollection<LocationCellViewModel>();
 					foreach (var result in results) {
-						System.Diagnostics.Debug.WriteLine("loc: {0}", result.Address);
 						LocationSuggestions.Add(new LocationCellViewModel(result));
 					}
 					ListHeight = Math.Min(LocationSuggestions.Count, _maxListItems) * _listRowHeight;
@@ -157,57 +191,6 @@ namespace Marp
 				});
 			}
 		}
-
-//		private object _textChangedEv = null;
-//		public object TextChangedEvent {
-//			get { return _textChangedEv; }
-//			set {
-//				_textChangedEv = value;
-//				System.Diagnostics.Debug.WriteLine ("MapPageModel::Text changed event fired.");
-//			}
-//		}
-//
-//		private MyLocation _location;
-//		private MapPage _mapPage;
-//		private Random _rng;
-//
-//		public MapPageModel() {
-//		}
-//
-//		private ObservableCollection<MyLocation> _pins;
-//		public ObservableCollection<MyLocation> Pins {
-//			get { return _pins ?? (_pins = new ObservableCollection<MyLocation>()); }
-//			set {
-//				_pins = value;
-//			}
-//		}
-//
-//		protected override void ViewIsAppearing(object sender, System.EventArgs e) {
-//
-//			_mapPage = (MapPage)CurrentPage;
-//			_location = _mapPage.result;
-//
-//			System.Diagnostics.Debug.WriteLine ("MapPageModel::map == null ? {0}", _mapPage.map == null);
-//
-//			if (_location != null) {
-//				var locations = App.LocationsInSession;
-//				Position p = _location.Position;
-//
-//				_mapPage.map.MoveToRegion (new MapSpan (p, 0.5, 0.5));
-//				_mapPage.map.Pins.Add (new Pin() {
-//					Label = _location.Address,
-//					Position = _location.Position
-//				});
-//				foreach (var location in locations) {
-//					_mapPage.map.Pins.Add (new Pin () {
-//						Label = location.Address,
-//						Position = location.Position
-//					});
-//				}
-//			}
-//
-//			base.ViewIsAppearing (sender, e);
-//		}
 	}
 }
 

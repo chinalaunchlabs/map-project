@@ -15,7 +15,7 @@ namespace Marp
 		public MapPage ()
 		{
 			InitializeComponent ();
-			map = _map;
+//			map = _map;
 //			map = new Map () {
 //				IsShowingUser = true,
 //				HeightRequest = 100,

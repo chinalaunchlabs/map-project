@@ -37,18 +37,17 @@ namespace Marp
 		public App ()
 		{
 
-			var page = FreshPageModelResolver.ResolvePageModel<MapPageModel> ();
-			var basicNavContainer = new FreshNavigationContainer (page);
-			MainPage = basicNavContainer;
-
-			// Old UI with master detail page
-//			var masterDetailNav = new FreshMasterDetailNavigationContainer ();
-//			masterDetailNav.Init ("Menu");
-//			masterDetailNav.AddPage<MapPageModel> ("Home");
-//			masterDetailNav.AddPage<AddLocationPageModel> ("Add Location");
-//			masterDetailNav.AddPage<ViewLocationPageModel> ("View Location");
+//			var page = FreshPageModelResolver.ResolvePageModel<MapPageModel> ();
+//			var basicNavContainer = new FreshNavigationContainer (page);
+//			MainPage = basicNavContainer;
 //
-//			MainPage = masterDetailNav;
+			// Old UI with master detail page
+			var masterDetailNav = new FreshMasterDetailNavigationContainer ();
+			masterDetailNav.Init ("Menu");
+			masterDetailNav.AddPage<MapPageModel> ("Home");
+			masterDetailNav.AddPage<ViewLocationPageModel> ("Saved Locations");
+
+			MainPage = masterDetailNav;
 		}
 
 	}

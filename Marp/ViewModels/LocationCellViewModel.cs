@@ -45,8 +45,8 @@ namespace Marp
 
 		public ICommand GoToLocCommand {
 			get {
-				return new Command (async (gdf) => {
-					MessagingCenter.Send <LocationCellViewModel, MyLocation>(this, "CellTapped", _location);
+				return new Command ((gdf) => {
+					MessagingCenter.Send <LocationCellViewModel, MyLocation>(this, "LocationTapped", _location);
 				});
 			}
 		}
@@ -54,6 +54,7 @@ namespace Marp
 		public ICommand SaveLocationCommand {
 			get { 
 				return new Command (() => {
+					MessagingCenter.Send <LocationCellViewModel, MyLocation>(this, "StarTapped", _location);
 					InDatabase = !InDatabase;	
 					RaisePropertyChanged("FaveOpacity");
 				});
