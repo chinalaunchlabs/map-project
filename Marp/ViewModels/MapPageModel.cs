@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Linq;
 using FreshMvvm;
 using Marp.Models;
 using Marp.Geocoder;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using PropertyChanged;
-using System.Collections.Generic;
-using System.Linq;
+using AdvancedTimer.Forms.Plugin.Abstractions;
 
 namespace Marp
 {
@@ -19,7 +20,15 @@ namespace Marp
 		private const int _maxListItems = 3;
 		private const int _listRowHeight = 50;
 		private bool _starTapped = false;
+		IAdvancedTimer timer;
+
 		public MapPageModel() {
+			timer = DependencyService.Get<IAdvancedTimer> ();
+			timer.initTimer (1000, timerElapsed, true);
+		}
+
+		public void timerElapsed(object obj, EventArgs e) {
+
 		}
 
 		protected override void ViewIsAppearing (object sender, EventArgs e)
@@ -48,7 +57,7 @@ namespace Marp
 			base.ViewIsAppearing (sender, e);
 
 			MessagingCenter.Subscribe<GoogleGeocoder>(this, "NetworkError", async (obj) => {
-				await CoreMethods.DisplayAlert("Network Error", "Something went wrong.", "OK");
+				await CoreMethods.DisplayAlert("Network Error", "Something went wrong. Please try your request again.", "OK");
 			});
 		}
 

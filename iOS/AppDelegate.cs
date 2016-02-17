@@ -17,6 +17,7 @@ namespace Marp.iOS
 			LoadApplication (new App ());
 
 			Xamarin.FormsMaps.Init (); // needed to show the maps
+			AdvancedTimer.Forms.Plugin.iOS.AdvancedTimerImplementation.Init();
 
 			return base.FinishedLaunching (app, options);
 		}

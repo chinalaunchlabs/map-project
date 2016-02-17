@@ -20,6 +20,7 @@ namespace Marp.Droid
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 
 			Xamarin.FormsMaps.Init (this, bundle); // needed to show the maps
+			AdvancedTimer.Forms.Plugin.Droid.AdvancedTimerImplementation.Init(); // for timer functionality
 
 			LoadApplication (new App ());
 		}
