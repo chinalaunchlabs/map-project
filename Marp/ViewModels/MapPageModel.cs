@@ -19,6 +19,17 @@ namespace Marp
 		private const int _listRowHeight = 50;
 		public MapPageModel() {
 			MessagingCenter.Subscribe<LocationCellViewModel, MyLocation> (this, "CellTapped", async (sender, result) => {
+				// save to session
+				App.LocationsInSession.Add(result);
+
+				// save to database
+//				App.Database.SaveLocation(result);
+
+				// clear search and hide results
+				IsListVisible = false;
+//				SearchAddress = "";
+
+				// update map
 				ObservableCollection<MyLocation> tmp = new ObservableCollection<MyLocation>();
 				foreach (var loc in App.LocationsInSession) {
 					tmp.Add(loc);
@@ -29,14 +40,19 @@ namespace Marp
 		}
 
 		/* Exposed Properties */
-		// Locations
-		// bound to ExtendedMapBehavior.ItemsSource
-		private ObservableCollection<MyLocation> _pins;
-		public ObservableCollection<MyLocation> Pins {
-			get { return _pins ?? (_pins = new ObservableCollection<MyLocation>()); }
-			set { _pins = value; }
+		private string _searchAddress;
+		public string SearchAddress {
+			get { return _searchAddress; }
+			set { _searchAddress = value; }
+		}
+			
+		private bool _loadingResults;
+		public bool LoadingResults {
+			get { return _loadingResults; }
+			set { _loadingResults = value; }
 		}
 
+		// List properties
 		private ObservableCollection<LocationCellViewModel> _locationSuggestions;
 		public ObservableCollection<LocationCellViewModel> LocationSuggestions {
 			get { return _locationSuggestions ?? (_locationSuggestions = new ObservableCollection<LocationCellViewModel>()); }
@@ -45,13 +61,6 @@ namespace Marp
 			}
 		}
 
-		private string _searchAddress;
-		public string SearchAddress {
-			get { return _searchAddress; }
-			set { _searchAddress = value; }
-		}
-
-		// List properties
 		private bool _isListVisible;
 		public bool IsListVisible {
 			get { return _isListVisible; }
@@ -72,10 +81,12 @@ namespace Marp
 			}
 		}
 
-		private bool _loadingResults;
-		public bool LoadingResults {
-			get { return _loadingResults; }
-			set { _loadingResults = value; }
+		// Map properties
+		// bound to ExtendedMapBehavior.ItemsSource
+		private ObservableCollection<MyLocation> _pins;
+		public ObservableCollection<MyLocation> Pins {
+			get { return _pins ?? (_pins = new ObservableCollection<MyLocation>()); }
+			set { _pins = value; }
 		}
 
 		private MyLocation _locationFocus;

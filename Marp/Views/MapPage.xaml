@@ -3,6 +3,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 	xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
 	xmlns:b="clr-namespace:Marp.Behaviors;assembly=Marp"
+	xmlns:local="clr-namespace:Marp;assembly=Marp" 
 	x:Class="Marp.MapPage">
 
 	<ContentPage.Resources>
@@ -33,7 +34,8 @@
 					HeightRequest="{Binding ListHeight, Mode=OneWay}">
 					<ListView.ItemTemplate>
 						<DataTemplate>
-							<TextCell Text="{Binding Address}" Command="{Binding GoToLocCommand}" />
+<!--							<TextCell Text="{Binding Address}" Command="{Binding GoToLocCommand}" />-->
+								<local:LocationCell />
 						</DataTemplate>
 					</ListView.ItemTemplate>
 				</ListView>

@@ -3483,8 +3483,11 @@ namespace Marp.Droid
 			// aapt resource value: 0x7f02007d
 			public const int mr_ic_settings_light = 2130837629;
 			
+			// aapt resource value: 0x7f02007f
+			public const int notification_template_icon_bg = 2130837631;
+			
 			// aapt resource value: 0x7f02007e
-			public const int notification_template_icon_bg = 2130837630;
+			public const int star_16 = 2130837630;
 			
 			static Drawable()
 			{

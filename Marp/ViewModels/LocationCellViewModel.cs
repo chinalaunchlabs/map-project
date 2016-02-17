@@ -16,26 +16,28 @@ namespace Marp
 		}
 
 		public string Address {
-			get { return _location.Address; }
+			get { return _location.Address.Truncate(40); }
+		}
+
+
+		public float FaveOpacity {
+			get {
+				return 1;
+			}
 		}
 
 		public ICommand GoToLocCommand {
 			get {
 				return new Command (async (gdf) => {
-					App.LocationsInSession.Add(_location);
-					App.Database.SaveLocation(_location);
 					MessagingCenter.Send <LocationCellViewModel, MyLocation>(this, "CellTapped", _location);
 				});
 			}
 		}
 
-		public ICommand EraseGoToLocCommand {
-			get {
-				return new Command (async (gdf) => {
-//					App.LocationsInSession.Add(_location);
-					App.LocationsInSession.Clear();
-//					App.Database.SaveLocation(_location);
-					MessagingCenter.Send <LocationCellViewModel, MyLocation>(this, "CellTapped2", _location);
+		public ICommand SaveLocationCommand {
+			get { 
+				return new Command (() => {
+					App.Database.SaveLocation(_location);
 				});
 			}
 		}
