@@ -10,10 +10,10 @@
 				<TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding SaveLocationCommand}" />
 			</ContentView.GestureRecognizers>
 			<Image Source="star_16.png" Aspect="AspectFill" VerticalOptions="Center" HorizontalOptions="Start" IsVisible="true" Opacity="{Binding FaveOpacity}">
-
+	
 			</Image>
 		</ContentView>
-		<ContentView HorizontalOptions="FillAndExpand" Padding="15">
+		<ContentView HorizontalOptions="FillAndExpand" VerticalOptions="Center">
 			<ContentView.GestureRecognizers>
 				<TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding GoToLocCommand}" />
 			</ContentView.GestureRecognizers>

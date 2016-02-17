@@ -130,6 +130,7 @@ namespace Marp
 							LocationSuggestions.Add (new LocationCellViewModel (location));
 						}
 						ListHeight = Math.Min(LocationSuggestions.Count, _maxListItems) * _listRowHeight;
+						RaisePropertyChanged("ListHeight");
 						_oldFiltered = filteredList;
 					}
 				});

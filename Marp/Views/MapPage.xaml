@@ -30,12 +30,12 @@
 
 			<StackLayout Spacing="0" IsVisible="{Binding IsListVisible}">
 				<ListView ItemsSource="{Binding LocationSuggestions}" CachingStrategy="RecycleElement"
-					HasUnevenRows="true" RowHeight="{Binding ListRowHeight, Mode=OneWay}" 
+					HasUnevenRows="false" RowHeight="{Binding ListRowHeight}"
 					HeightRequest="{Binding ListHeight, Mode=OneWay}">
 					<ListView.ItemTemplate>
 						<DataTemplate>
 <!--							<TextCell Text="{Binding Address}" Command="{Binding GoToLocCommand}" />-->
-								<local:LocationCell />
+							<local:LocationCell />
 						</DataTemplate>
 					</ListView.ItemTemplate>
 				</ListView>
@@ -43,7 +43,7 @@
 
 			<ActivityIndicator Color="Gray" IsRunning="{Binding LoadingResults}" IsVisible="{Binding LoadingResults}" />
 
-			<maps:Map MapType="Street" HorizontalOptions="FillAndExpand"
+			<maps:Map MapType="Street" HorizontalOptions="Fill"
 					  VerticalOptions="FillAndExpand" IsShowingUser="true" IsVisible="true">
 				<maps:Map.Behaviors>
 					<b:ExtendedMapBehavior ItemsSource="{Binding Pins}" FocusOn="{Binding LocationFocus}" />
