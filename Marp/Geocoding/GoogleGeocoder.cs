@@ -4,6 +4,7 @@ using China.RestClient;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Marp.Models;
+using Xamarin.Forms;
 
 namespace Marp.Geocoder
 {
@@ -29,8 +30,13 @@ namespace Marp.Geocoder
 			var uri = string.Format ("{0}json?address={1}&key={2}", API_BASE, WebUtility.UrlEncode(address), API_KEY);
 			var response = await _client.Get<GoogleGeocoderResponse>(uri);
 			List<MyLocation> locations = new List<MyLocation> ();
-			foreach (var result in response.Results) {
-				locations.Add (new MyLocation (result));
+
+			if (response.Status != "network_error") {
+				foreach (var result in response.Results) {
+					locations.Add (new MyLocation (result));
+				}
+			} else {
+				MessagingCenter.Send<GoogleGeocoder> (this, "NetworkError");
 			}
 			return locations;
 		}

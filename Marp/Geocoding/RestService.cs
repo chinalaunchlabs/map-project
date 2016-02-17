@@ -39,6 +39,8 @@ namespace China.RestClient
 		private void InitializeClient() {
 			_client.DefaultRequestHeaders.Accept.Clear ();
 			_client.DefaultRequestHeaders.Accept.Add (new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue ("application/json"));
+//			_client.Timeout = TimeSpan.FromMilliseconds (100);	// TODO: Edit artificial timeout later.
+
 		}
 
 		/// <summary>
@@ -78,7 +80,6 @@ namespace China.RestClient
 			}
 			catch (Exception e) {
 				instance.HandleException(e, source);
-//				throw e;
 			}
 
 			return (T)instance;

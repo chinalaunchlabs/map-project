@@ -46,6 +46,10 @@ namespace Marp
 				_starTapped = true;
 			});
 			base.ViewIsAppearing (sender, e);
+
+			MessagingCenter.Subscribe<GoogleGeocoder>(this, "NetworkError", async (obj) => {
+				await CoreMethods.DisplayAlert("Network Error", "Something went wrong.", "OK");
+			});
 		}
 
 		protected override void ViewIsDisappearing (object sender, EventArgs e)
