@@ -27,8 +27,24 @@ namespace Marp
 			timer.initTimer (1000, timerElapsed, true);
 		}
 
-		public void timerElapsed(object obj, EventArgs e) {
+		public async void timerElapsed(object obj, EventArgs e) {
+			System.Diagnostics.Debug.WriteLine ("MapPageModel::Timer fired. Auto-searching.");
+			timer.stopTimer ();
+			LoadResults ();
+		}
 
+		private async void LoadResults() {
+			IsListVisible = false;
+			LoadingResults = true;
+			List<MyLocation> results = await App.GeocoderClient.FetchLocations(SearchAddress);
+			var tmp = new ObservableCollection<LocationCellViewModel>();
+			foreach (var result in results) {
+				tmp.Add(new LocationCellViewModel(result));
+			}
+			LocationSuggestions = tmp;
+			ListHeight = Math.Min(LocationSuggestions.Count, _maxListItems) * _listRowHeight;
+			LoadingResults = false;
+			IsListVisible = true;
 		}
 
 		protected override void ViewIsAppearing (object sender, EventArgs e)
@@ -51,19 +67,18 @@ namespace Marp
 			});
 
 			MessagingCenter.Subscribe<LocationCellViewModel, MyLocation> (this, "StarTapped", (sndr, location) => {
-				System.Diagnostics.Debug.WriteLine("MapPageModel::Star was tapped.");
 				_starTapped = true;
 			});
 			base.ViewIsAppearing (sender, e);
 
 			MessagingCenter.Subscribe<GoogleGeocoder>(this, "NetworkError", async (obj) => {
+				System.Diagnostics.Debug.WriteLine("Network error message was received.");
 				await CoreMethods.DisplayAlert("Network Error", "Something went wrong. Please try your request again.", "OK");
 			});
 		}
 
 		protected override void ViewIsDisappearing (object sender, EventArgs e)
 		{
-			System.Diagnostics.Debug.WriteLine ("MapPageModel::View is disappearing");
 			MessagingCenter.Unsubscribe<LocationCellViewModel, MyLocation> (this, "LocationTapped");
 			base.ViewIsDisappearing (sender, e);
 		}
@@ -146,6 +161,18 @@ namespace Marp
 						RaisePropertyChanged("ListHeight");
 						_oldFiltered = filteredList;
 					}
+
+					// fire inactivity timer
+					if (timer.isTimerEnabled()) {
+//						System.Diagnostics.Debug.WriteLine("MapPageModel::Restarting timer...");
+						timer.stopTimer();
+						if (partialQuery != "")
+							timer.startTimer();
+					} else {
+//						System.Diagnostics.Debug.WriteLine("MapPageModel::Starting timer...");
+						timer.startTimer();
+					}
+
 				});
 			}
 		}
@@ -174,15 +201,15 @@ namespace Marp
 		public ICommand SearchBarUnfocused {
 			get {
 				return new Command (() => {
-					System.Diagnostics.Debug.WriteLine("MapPageModel::Search bar has gone out of focus.");
-					System.Diagnostics.Debug.WriteLine("MapPageModel::_starTapped = {0}", _starTapped);
+//					System.Diagnostics.Debug.WriteLine("MapPageModel::Search bar has gone out of focus.");
+//					System.Diagnostics.Debug.WriteLine("MapPageModel::_starTapped = {0}", _starTapped);
 
 					if (_starTapped) {
-						System.Diagnostics.Debug.WriteLine("MapPageModel::But a star was tapped so not hiding list.");
+//						System.Diagnostics.Debug.WriteLine("MapPageModel::But a star was tapped so not hiding list.");
 						_starTapped = false;
 					}
 					else {
-						System.Diagnostics.Debug.WriteLine("MapPageModel::Hiding list.");
+//						System.Diagnostics.Debug.WriteLine("MapPageModel::Hiding list.");
 						IsListVisible = false;
 					}
 				});

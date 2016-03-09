@@ -31,6 +31,7 @@
 			<StackLayout Spacing="0" IsVisible="{Binding IsListVisible}">
 				<ListView ItemsSource="{Binding LocationSuggestions}" CachingStrategy="RecycleElement"
 					HasUnevenRows="false" RowHeight="{Binding ListRowHeight}"
+					MinimumHeightRequest="{Binding ListHeight}"
 					HeightRequest="{Binding ListHeight, Mode=OneWay}">
 					<ListView.ItemTemplate>
 						<DataTemplate>

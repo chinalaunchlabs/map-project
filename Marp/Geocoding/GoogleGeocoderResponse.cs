@@ -27,6 +27,7 @@ namespace Marp.Geocoder
 				}
 			} else {
 				System.Diagnostics.Debug.WriteLine ("GoogleGeocoderResponse::{0}.", e.Message);
+				source.Cancel ();
 //				throw e;
 			}
 			response = new GoogleGeocoderResponseObj ();

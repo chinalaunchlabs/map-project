@@ -36,6 +36,7 @@ namespace Marp.Geocoder
 					locations.Add (new MyLocation (result));
 				}
 			} else {
+				System.Diagnostics.Debug.WriteLine ("Network error info");
 				MessagingCenter.Send<GoogleGeocoder> (this, "NetworkError");
 			}
 			return locations;
