@@ -15,3 +15,4 @@ The maps app na pinagawa ni Mar.
 	Xamarin.FormsMaps.Init(this, bundle);
 	```
 	* Android emulator needs Gapps. :/
+* If also using the Google geocoder, `com.google.android.maps.v2.API_KEY` can be omitted and replaced with `com.google.android.geo.API_KEY`.
